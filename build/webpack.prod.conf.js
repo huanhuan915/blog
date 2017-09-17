@@ -28,10 +28,19 @@ var prodWebpackConf = merge(webpackConf,{
     	filename: 'static/js/[name].[hash].js' 
     },
     plugins:[ 
-         new webpack.optimize.UglifyJsPlugin({  
+        new webpack.optimize.UglifyJsPlugin({  
             compress: {    
             	warnings: false   
             } 
-        })
-    ]});
+        }),
+        new ExtractTextPlugin("static/css/style.css")
+    ],
+    vue: { 
+        loaders: {  
+            css: ExtractTextPlugin.extract('vue-style-loader', 'css'),  
+            // you can also include <style lang="less"> or other langauges  
+            less: ExtractTextPlugin.extract('vue-style-loader', 'css!less')
+        }
+    }
+});
 module.exports = prodWebpackConf;

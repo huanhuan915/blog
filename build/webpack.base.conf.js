@@ -15,7 +15,7 @@ var  webpackConf = {
         publicPath:'/',  
         filename: '[name].[hash].js' 
     },
-     resolve: {  
+    resolve: {  
         extensions: ['', '.js', '.vue'], 
         alias: {   'vue': 'vue/dist/vue.js'  } // 设置别名vue1不需要设置，vue2必须设置 否则会报错 
     },
@@ -30,11 +30,18 @@ var  webpackConf = {
                 test: /\.js$/,    
                 loader: 'babel',    
                 exclude: /node_modules/   
-            }  ]
+            },
+            {
+                test: /\.png$|\.jpg$|\.gif$|\.ico$/, 
+                loader: "file?name=static/img/[name].[hash].[ext]", 
+                exclude: /node_modules/
+            }
+        ]
     }, 
     vue: {  
         loaders: {   
-            js: 'babel'  
+            js: 'babel',
+            postcss: [require('autoprefixer')()]
         } 
     }, 
     plugins:[  

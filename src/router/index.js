@@ -1,6 +1,6 @@
 import VueRouter from  "vue-router";
 import Index from "../views/Index/Index";
-import User from "../views/User/User";
+import login from "../views/User/login";
 
 const routes = [
 {
@@ -8,8 +8,8 @@ const routes = [
 	component:Index
 },
 {
-	path:'/user',
-	component:User
+	path:'/login',
+	component:login
 }];
 const router = new VueRouter({
 	mode: 'history',
