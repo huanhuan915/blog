@@ -1,7 +1,7 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');//用于请求网页的logo
-var history = require('connect-history-api-fallback');
+var history = require('connect-history-api-fallback');//用于支持HTML5 history API
 var logger = require('morgan');//日志记录模块
 var cookieParser = require('cookie-parser');//解释cookie的工具，通过req.cookie可以取到传过来的cookie
 var bodyParser = require('body-parser');//对post请求的请求体进行解析
