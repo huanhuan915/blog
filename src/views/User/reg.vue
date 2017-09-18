@@ -8,17 +8,17 @@
 			<form method="post" id="submitForm">
 				<span></span>
 				<label for="username">
-				用户名<p id="tip1" class="tip"></p>
+				用户名<p class="tip">{{tip1}}</p>
 				</label>
-				<input type="text" name="userInfo" class="formElement text" id="username" placeholder="为6~12位字母或数字" />
+				<input type="text" name="userInfo" class="formElement text" placeholder="为6~12位字母或数字" v-model="username" @blur="testUserName()"/>
 
 				<label for="password">
-				密码<p id="tip2" class="blackTip"></p>
+				密码<p class="blackTip" v-model="tip2"></p>
 				</label>
 				<input type="password" name="userInfo" class="formElement text" id="password" placeholder="为6~12位字母或数字">
 
 				<label for="passwordAgain">
-				确认密码<p id="tip3" class="blackTip"></p>
+				确认密码<p class="blackTip" v-model="tip3"></p>
 				</label>
 				<input type="password" name="userInfo" class="formElement text" id="passwordAgain">
 
@@ -48,11 +48,16 @@ import axios from 'axios';
 export default{
 	data(){
 		return {
-
+			tip1:'',
+			tip2:'',
+			tip3:'',
+			username:'',
+			password:'',
+			email:''
 		}
 	},
 	methods:{
-		login:function(){
+		reg:function(){
 			console.log(1111);
 			axios.get('/user/sss',{
 				params: {
@@ -68,6 +73,26 @@ export default{
 			.catch(function(){
 				console.log("error");
 			});
+		},
+		testUserName:function(){
+			if (this.username == '') {
+				this.tip1 = '请输入用户名';
+			}else if(this.username.length<6 || this.username.length>12) {
+				this.tip1 = '用户名为6-12位字符';
+			}else{
+				axios.post('user/queUsername',{
+					params: {
+						username: this.username
+					}
+				}).then(function(req,res){
+					console.log('query username success');
+				}, function(){
+					console.log('query username fail');
+				}).catch(function(){
+					console.log('error');
+				})
+			}
+			// this.tip1 = 'username tested';
 		}
 	}
 }

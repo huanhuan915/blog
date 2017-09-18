@@ -1,5 +1,5 @@
 /*
-链接数据库并输出Model对象
+链接数据库并输出Model对象 
  */
 
 var mongoose = require('mongoose');

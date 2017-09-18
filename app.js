@@ -34,7 +34,7 @@ if(app.get('env') == 'development'){
     	stats: {      
     		colors: true,
     		chunks: false   
-    	}  
+    	}
     });  
     app.use(devMiddleware);  
     app.use(require("webpack-hot-middleware")(compiler));  
