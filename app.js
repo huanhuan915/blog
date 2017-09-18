@@ -6,7 +6,7 @@ var logger = require('morgan');//日志记录模块
 var cookieParser = require('cookie-parser');//解释cookie的工具，通过req.cookie可以取到传过来的cookie
 var bodyParser = require('body-parser');//对post请求的请求体进行解析
 
-
+var routes = require('./server/index')
 var app = express();
 
 // app.use(favicon(__dirname + '/public/sun_.ico'));
@@ -14,10 +14,11 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+routes(app);
 
-app.get('/user/sss',function(req,res){
-    res.send('hello world');
-});
+// app.post('/login/login',function(req,res){
+//     res.send('hello world');
+// });
 app.use(history({
     // verbose: true//详细记录
 }));

@@ -1,5 +1,5 @@
 <template>
-	<div id="main-wrapper" >
+<div id="main-wrapper" >
 <header>
 	<div id="logo"></div>
 </header>
@@ -8,18 +8,18 @@
 		<form method="post" id="submitForm">
 		<span></span>
 		<label for="uaername">
-		用户名<p id="tip1" class="tip"></p>
+		用户名<p id="tip1" class="tip">{{ tip1 }}</p>
 		</label>
-		<input type="text" name="userInfo" class="formElement text" id="username" />		
+		<input type="text" name="userInfo" class="formElement text" id="username" @blur="testUserName" v-model="username" />		
 		<label for="password">
-		密码<p id="tip2" class="blackTip">:为6~12位字母或数字</p>
+		密&nbsp;&nbsp;&nbsp;码<p id="tip2" class="tip">{{ tip2 }}</p>
 		</label>
-		<input type="password" name="userInfo" class="formElement text" id="password">
+		<input type="password" name="userInfo" class="formElement text" id="password" placeholder="为6~12位字母或数字" v-model="password" @blur="testPassword()">
 		<label for="checkbox" class="formSpecial">
 		<input type="checkbox" value="记住登陆状态" name="checkbox" id="checkbox" class="formSpecial">
 		记住登陆状态
 		</label>
-		<input type="submit" name="submit" value="登陆" class="formSpecial" id="button">
+		<input type="submit" name="submit" value="登陆" class="formSpecial" id="button" @click.prevent="login()">
 		</form>
 	</div>
 	<div class="Other">
@@ -42,32 +42,56 @@ import axios from 'axios';
 export default{
 	data(){
 		return {
-
+			tip1: '',
+			tip2: '',
+			username: '',
+			password: ''
 		}
 	},
 	methods:{
-		login:function(){
-			console.log(1111);
-			axios.get('/user/sss',{
-				params: {
-					ID: 12345
-				}
-			})
-			.then(function(req,res){
-				console.log("success");
-				console.log(res);
-			}, function(){
-				console.log("error");
-			})
-			.catch(function(){
-				console.log("error");
-			});
+		login:function(ev){
+			if (this.username.length>=6 && this.username.length<=12 && this.password.length>=6 && this.password.length<=12) {
+				console.log(1111);
+				//发送登陆post请求
+				axios.post('/login/login',{
+					params: {
+						username: this.username,
+						password: this.password
+					}
+				})
+				.then(function(res){
+					//成功回掉
+					console.log("success");
+					console.log(res);
+				}, function(){
+					console.log("error");
+				})
+				.catch(function(){
+					console.log("error");
+				});
+			}
+		},
+		testUserName: function(){
+			if (this.username == '') {
+				this.tip1 = '请输入用户名';
+			}else if (this.username.length<6 || this.username.length>12) {
+				this.tip1 = '用户名为6-12位字符';
+			}else{
+				this.tip1 = '';
+			}
+		},
+		testPassword: function(){
+			if (this.password.length<6 || this.password.length>12) {
+				this.tip2 = '密码为6-12位数字或字母';
+			}else{
+				this.tip2 = '';
+			}
 		}
 	}
 }
 </script>
 
-<style type="text/css" media="screen" lang="less">
+<style lang="less" scoped>
 body{
 	width: 100%;
 	height: 100%;

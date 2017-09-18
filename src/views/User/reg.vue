@@ -1,38 +1,44 @@
 <template>
 	<div id="main-wrapper" >
-<header>
-	<div id="logo"></div>
-</header>
-<section>
-	<div id="main-form">
-		<form method="post" id="submitForm">
-		<span></span>
-		<label for="uaername">
-		用户名<p id="tip1" class="tip"></p>
-		</label>
-		<input type="text" name="userInfo" class="formElement text" id="username" />		
-		<label for="password">
-		密码<p id="tip2" class="blackTip">:为6~12位字母或数字</p>
-		</label>
-		<input type="password" name="userInfo" class="formElement text" id="password">
-		<label for="checkbox" class="formSpecial">
-		<input type="checkbox" value="记住登陆状态" name="checkbox" id="checkbox" class="formSpecial">
-		记住登陆状态
-		</label>
-		<input type="submit" name="submit" value="登陆" class="formSpecial" id="button">
-		</form>
+	<header>
+		<div id="logo"></div>
+	</header>
+	<section>
+		<div  id="main-form">
+			<form method="post" id="submitForm">
+				<span></span>
+				<label for="username">
+				用户名<p id="tip1" class="tip"></p>
+				</label>
+				<input type="text" name="userInfo" class="formElement text" id="username" placeholder="为6~12位字母或数字" />
+
+				<label for="password">
+				密码<p id="tip2" class="blackTip"></p>
+				</label>
+				<input type="password" name="userInfo" class="formElement text" id="password" placeholder="为6~12位字母或数字">
+
+				<label for="passwordAgain">
+				确认密码<p id="tip3" class="blackTip"></p>
+				</label>
+				<input type="password" name="userInfo" class="formElement text" id="passwordAgain">
+
+				<label for="email">
+				邮箱<!-- <p id="tip4" class="tip">两次输入的密码不同</p> -->
+				</label>
+				<input type="email" name="userInfo" class="formElement text" id="email">
+
+			<div id="links">
+				<div id="toLogin" class="more">
+					<a href="login">登陆 </a>|
+					<a href="#"> 关于本站</a>
+				</div>
+				<input type="submit" name="submit" value="注册" class="formSpecial" id="button">
+			</div>
+			</form>
+		</div>
+
+	</section>
 	</div>
-	<div class="Other">
-	<div id="toReg" class="more">
-		<a href="reg">注册</a>|
-		<a href="#">找回密码</a>
-	</div>
-	<div id="toHome" class="more">
-	<a href="#">回到主页</a>
-	</div>
-	</div>
-</section>
-</div>
 </template>
 
 <script>
@@ -67,7 +73,7 @@ export default{
 }
 </script>
 
-<style type="text/css" media="screen" lang="less">
+<style lang="less" scoped>
 body{
 	width: 100%;
 	height: 100%;
@@ -92,7 +98,7 @@ header #logo{
 }
 section #main-form{
 	width: 350px;
-	height: 230px;
+	height: 350px;
 	border:1px solid lightgray;
 	margin: 0 auto;
 	background-color: rgba(0,0,0,0.02);
@@ -127,39 +133,38 @@ input{
 	float: right;
     margin-top: 20px;
     margin: right;
-    margin-right: 23px;
+    margin-right: 24px;
     background-color: rgba(0,0,0,0.2);
     height: 40px;
     width: 80px;
     background-color: silver;
+    display: inline-block;
 }
 #button:hover{
 	background-color: #336666;
 	width: 82px;
 	height: 42px;
 }
-section .other{
-	width: 350px;
-	height: 60px;
-	margin: 0 auto;
-}
-section .more{
-	width: 350px;
-	height: 30px;
-	display: block;
-	margin: auto;
-	margin-top: 20px;
-	margin-bottom:0;
-}
-section .more a{
-	text-decoration: none;
-	font-size: 15px;
-	color: lightgray;
-}
-section .more a:hover{
-	color: gray;
-	font-size: 17px;
-	font-weight: 20;
+section {
+	.more{
+		width: 170px;
+		height: 30px;
+		margin: auto;
+		margin-top: 20px;
+		margin-bottom:0;
+		margin-left: 24px;
+		display: inline-block;
+		a {
+			text-decoration: none;
+			font-size: 15px;
+			color: lightgray;
+		}
+		a:hover {
+			color: gray;
+			font-size: 17px;
+			font-weight: 20;
+		}
+	}
 }
 .tip{
 	display: inline-block;
