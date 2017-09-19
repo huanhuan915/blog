@@ -60,7 +60,12 @@ export default{
 					}
 				})
 				.then(function(res){
-					//成功回掉
+					if (res.data.login==="success") {
+						alert("登录成功");
+						window.location = '/'
+					}else{
+						alert("登录失败，请重试");
+					}
 					console.log("success");
 					console.log(res);
 				}, function(){

@@ -11,11 +11,14 @@ module.exports = function(app){
 			if (err) {
 				console.log('用户登录时数据库查询失败');
 			}else{
-				console.log(doc[0]);
+				if (doc[0].password===password) {
+					console.log('登陆验证通过');
+					res.json({login:"success"});
+				}else{
+					res.json({login:"fail"});
+				}
 			}
-		})
-		console.log('/login/login');
-		res.send('/login/login received')
+		});
 	});
 	app.post('/user/queUsername',function(req,res){
 		var username = req.body.params.username;
