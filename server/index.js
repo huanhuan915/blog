@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('../server/model');
 module.exports = function(app){
-	app.post('/login/login',function(req,res){
+	app.post('/user/login',function(req,res){
 		var username = req.body.params.username;
 		var password = req.body.params.password;
 		console.log(req.body.params.username);
@@ -24,8 +24,46 @@ module.exports = function(app){
 				if (err) {
 					console.log('注册时查询用户名是否存在，查询数据库出错');
 				}else{
-					console.log('查询用户名是否被注册时查询到的用户信息'+doc[0]);
+					if (doc[0]) {
+						res.send('exist');
+					}else{
+						res.send('none');
+					}
 				}
 			})
+	});
+	//用户注册接口,isReg：
+	// 用户已存在   0
+	// 注册成功     1
+	// 注册失败     -1
+	app.post('/user/reg',function(req,res){
+		var username = req.body.params.username;
+		var password = req.body.params.password;
+		var email = req.body.params.email;
+		var user = new User({
+			username:username,
+			password:password,
+			email:email
+		});
+		User.find({'username':username},function(err,doc){
+			if (err) {
+				console.log('查询数据库失败');
+				res.json({isReg:-1});
+			}else{
+				if (doc[0]) {
+					res.json({isReg:0});
+				}else{
+					user.save(function(err){
+						if (err) {
+							res.json({isReg:-1});
+						}else{
+							res.json({isReg:1});
+						}
+					})
+				}
+			}
+		})
+		console.log('reg username:'+username);
+		console.log('reg password:'+password);
 	})
 };

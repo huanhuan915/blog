@@ -13,14 +13,14 @@
 				<input type="text" name="userInfo" class="formElement text" placeholder="为6~12位字母或数字" v-model="username" @blur="testUserName()"/>
 
 				<label for="password">
-				密码<p class="blackTip" v-model="tip2"></p>
+				密码<p class="tip">{{tip2}}</p>
 				</label>
-				<input type="password" name="userInfo" class="formElement text" id="password" placeholder="为6~12位字母或数字">
+				<input type="password" name="userInfo" class="formElement text" placeholder="为6~12位字母或数字" v-model="password" @blur="testPassword">
 
 				<label for="passwordAgain">
-				确认密码<p class="blackTip" v-model="tip3"></p>
+				确认密码<p class="tip">{{tip3}}</p>
 				</label>
-				<input type="password" name="userInfo" class="formElement text" id="passwordAgain">
+				<input type="password" name="userInfo" class="formElement text" v-model="passwordA" @blur="testPasswordA">
 
 				<label for="email">
 				邮箱<!-- <p id="tip4" class="tip">两次输入的密码不同</p> -->
@@ -32,7 +32,7 @@
 					<a href="login">登陆 </a>|
 					<a href="#"> 关于本站</a>
 				</div>
-				<input type="submit" name="submit" value="注册" class="formSpecial" id="button">
+				<input type="submit" name="submit" value="注册" id="button" @click.prevent="reg()">
 			</div>
 			</form>
 		</div>
@@ -53,27 +53,40 @@ export default{
 			tip3:'',
 			username:'',
 			password:'',
-			email:''
+			passwordA:'',
+			email:'',
+			regFlag:''
 		}
 	},
 	methods:{
 		reg:function(){
-			console.log(1111);
-			axios.get('/user/sss',{
-				params: {
-					ID: 12345
-				}
-			})
-			.then(function(req,res){
-				console.log("success");
-				console.log(res);
-			}, function(){
-				console.log("error");
-			})
-			.catch(function(){
-				console.log("error");
-			});
+			if (!(this.tip1 || this.tip2 || this.tip3)) {
+				axios.post('/user/reg',{
+					params: {
+						username:this.username,
+						password:this.password,
+						email   :this.email
+					}
+				})
+				.then(function(res){
+					if (res.data.isReg==-1) {
+						alert('注册失败，请稍后重试或联系管理员');
+					}else if (res.data.isReg==0) {
+						alert('您已注册,请登陆');
+					}else{
+						alert('注册成功，请登录');
+						window.location = '/login';
+					}
+				}.bind(this), function(){
+					console.log("/user/reg 请求错误");
+				})
+				.catch(function(error){
+					console.log(error);
+				});
+			}
+			
 		},
+		//注册时检测用户名是否已经被注册
 		testUserName:function(){
 			if (this.username == '') {
 				this.tip1 = '请输入用户名';
@@ -84,16 +97,37 @@ export default{
 					params: {
 						username: this.username
 					}
-				}).then(function(req,res){
-					console.log('query username success');
-				}, function(){
-					console.log('query username fail');
-				}).catch(function(){
-					console.log('error');
+				}).then(function(res){
+					if (res.data=='exist') {
+						this.tip1 = '用户名已存在';
+					}else{
+						this.tip1 = '';
+					}
+				}.bind(this), function(){
+				}).catch(function(error){
+					console.log(error);
 				})
 			}
-			// this.tip1 = 'username tested';
+		},
+		testPassword:function(){
+			if (this.password.length == 0) {
+				this.tip2 = '请输入密码';
+			}else if (this.password.length<6 || this.password.length>12) {
+				this.tip2 = '密码格式错误';
+			}else if (this.passwordA !== this.password) {
+				this.tip3 = '两次密码不同';
+			}else{
+				this.tip2 = '';
+			}
+		},
+		testPasswordA:function(){
+			if (this.password !== this.passwordA) {
+				this.tip3 = '两次密码不同';
+			}else{
+				this.tip3 = '';
+			}
 		}
+
 	}
 }
 </script>
@@ -141,7 +175,7 @@ form .formElement{
 	width: 300px;
 	height: 30px;
 }
-form .formSpecial{
+form #button{
 	display: inline-block;
 }
 label{

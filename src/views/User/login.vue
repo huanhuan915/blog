@@ -8,15 +8,15 @@
 		<form method="post" id="submitForm">
 		<span></span>
 		<label for="uaername">
-		用户名<p id="tip1" class="tip">{{ tip1 }}</p>
+		用户名<p class="tip">{{ tip1 }}</p>
 		</label>
-		<input type="text" name="userInfo" class="formElement text" id="username" @blur="testUserName" v-model="username" />		
+		<input type="text" name="userInfo" class="formElement text" @blur="testUserName" placeholder="为6~12位字母或数字" v-model="username" />		
 		<label for="password">
-		密&nbsp;&nbsp;&nbsp;码<p id="tip2" class="tip">{{ tip2 }}</p>
+		密&nbsp;&nbsp;&nbsp;码<p class="tip">{{ tip2 }}</p>
 		</label>
-		<input type="password" name="userInfo" class="formElement text" id="password" placeholder="为6~12位字母或数字" v-model="password" @blur="testPassword()">
+		<input type="password" name="userInfo" class="formElement text" placeholder="为6~12位字母或数字" v-model="password" @blur="testPassword()">
 		<label for="checkbox" class="formSpecial">
-		<input type="checkbox" value="记住登陆状态" name="checkbox" id="checkbox" class="formSpecial">
+		<input type="checkbox" value="记住登陆状态" name="checkbox" class="formSpecial">
 		记住登陆状态
 		</label>
 		<input type="submit" name="submit" value="登陆" class="formSpecial" id="button" @click.prevent="login()">
@@ -53,7 +53,7 @@ export default{
 			if (this.username.length>=6 && this.username.length<=12 && this.password.length>=6 && this.password.length<=12) {
 				console.log(1111);
 				//发送登陆post请求
-				axios.post('/login/login',{
+				axios.post('/user/login',{
 					params: {
 						username: this.username,
 						password: this.password
