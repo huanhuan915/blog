@@ -25,7 +25,7 @@
 	<div class="Other">
 	<div id="toReg" class="more">
 		<a href="reg">注册</a>|
-		<a href="#">找回密码</a>
+		<a href="#">忘记密码</a>
 	</div>
 	<div id="toHome" class="more">
 	<a href="#">回到主页</a>
@@ -45,12 +45,14 @@ export default{
 			tip1: '',
 			tip2: '',
 			username: '',
-			password: ''
+			password: '',
+			uPattern: /^[a-zA-Z0-9]{6,16}$/,
+			pPattern: /^[a-zA-Z0-9]{6,16}$/
 		}
 	},
 	methods:{
 		login:function(ev){
-			if (this.username.length>=6 && this.username.length<=12 && this.password.length>=6 && this.password.length<=12) {
+			if ((this.uPattern.test(this.username))&&(this.pPattern.test(this.password))) {
 				console.log(1111);
 				//发送登陆post请求
 				axios.post('/user/login',{
@@ -65,6 +67,8 @@ export default{
 						window.location = '/'
 					}else{
 						alert("登录失败，请重试");
+						this.username = '';
+						this.password = '';
 					}
 					console.log("success");
 					console.log(res);
@@ -79,15 +83,15 @@ export default{
 		testUserName: function(){
 			if (this.username == '') {
 				this.tip1 = '请输入用户名';
-			}else if (this.username.length<6 || this.username.length>12) {
-				this.tip1 = '用户名为6-12位字符';
+			}else if (!this.uPattern.test(this.username)) {
+				this.tip1 = '用户名格式错误';
 			}else{
 				this.tip1 = '';
 			}
 		},
 		testPassword: function(){
-			if (this.password.length<6 || this.password.length>12) {
-				this.tip2 = '密码为6-12位数字或字母';
+			if (!this.pPattern.test(this.password)) {
+				this.tip2 = '密码格式错误';
 			}else{
 				this.tip2 = '';
 			}

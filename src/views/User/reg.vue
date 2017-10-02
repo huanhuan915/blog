@@ -88,11 +88,14 @@ export default{
 		},
 		//注册时检测用户名是否已经被注册
 		testUserName:function(){
+			var uPattern = /^[a-zA-Z0-9]{6,16}$/;
+
 			if (this.username == '') {
 				this.tip1 = '请输入用户名';
-			}else if(this.username.length<6 || this.username.length>12) {
-				this.tip1 = '用户名为6-12位字符';
+			}else if(!uPattern.test(this.username)) {
+				this.tip1 = '用户名为6-16位字母或数字';
 			}else{
+				this.tip1 = '';
 				axios.post('user/queUsername',{
 					params: {
 						username: this.username
@@ -110,14 +113,15 @@ export default{
 			}
 		},
 		testPassword:function(){
+			var pPattern = /^[a-zA-Z0-9]{6,16}$/;
 			if (this.password.length == 0) {
 				this.tip2 = '请输入密码';
-			}else if (this.password.length<6 || this.password.length>12) {
+			}else if (!pPattern.test(this.password)) {
 				this.tip2 = '密码格式错误';
+			}else if (pPattern.test(this.password)){
+				this.tip2 = '';
 			}else if (this.passwordA !== this.password) {
 				this.tip3 = '两次密码不同';
-			}else{
-				this.tip2 = '';
 			}
 		},
 		testPasswordA:function(){
