@@ -32,7 +32,7 @@ var  webpackConf = {
                 exclude: /node_modules/   
             },
             {
-                test: /\.png$|\.jpg$|\.gif$|\.ico$/, 
+                test: /\.png$|\.jpg$|\.gif$|\.ico$|\.svg$/, 
                 loader: "file?name=static/img/[name].[hash].[ext]", 
                 exclude: /node_modules/
             }

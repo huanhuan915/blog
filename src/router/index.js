@@ -1,7 +1,7 @@
 import VueRouter from  "vue-router";
-import Index from "../views/Index/Index";
-import login from "../views/User/login";
-import reg from "../views/User/reg"
+import Index from "../components/Index";
+import login from "../components/login";
+import reg from "../components/reg"
 
 const routes = [
 {
@@ -9,10 +9,14 @@ const routes = [
 	component:Index
 },
 {
-	path:'/login',
+	path:'/admin',
+	component:login
+},
+{
+	path:'/admin/login',
 	component:login
 },{
-	path:'/reg',
+	path:'/admin/reg',
 	component:reg
 }];
 const router = new VueRouter({

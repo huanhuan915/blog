@@ -6,7 +6,5 @@
 </template>
 
 <style>
-	body{
-		color: grey;
-	}
+@import './style/normalize.css';
 </style>
