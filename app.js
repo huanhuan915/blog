@@ -5,6 +5,7 @@ var history = require('connect-history-api-fallback');//用于支持HTML5 histor
 var logger = require('morgan');//日志记录模块
 var cookieParser = require('cookie-parser');//解释cookie的工具，通过req.cookie可以取到传过来的cookie
 var bodyParser = require('body-parser');//对post请求的请求体进行解析
+var session = require('express-session');
 
 var routes = require('./server/index')
 var app = express();
@@ -14,6 +15,18 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+//express-session
+app.use(session({
+    name: 'identityKey',
+    secret: 'radom string',
+    cookie: {
+        httpOnly:true,
+        secure: false, //secure值为true时，cookie在HTTP中是无效的，在HTTPS中才有效
+        maxAge: 60 * 1000//cooki多久后过期的相对时间
+    }
+}))
+
 routes(app);
 
 // app.post('/login/login',function(req,res){
@@ -41,4 +54,6 @@ if(app.get('env') == 'development'){
 }else{
 	app.use(express.static(path.join(__dirname,'output')));
 }
+
+
 module.exports = app;
