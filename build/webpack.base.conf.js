@@ -1,14 +1,21 @@
 // nodejs 中的path模块
 var path = require('path');
 var webpack = require('webpack');
+// 页面模板
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var  webpackConf = {
+var utils = require('./utils')
+
+
+var webpackConf = {
     // 入口文件，path.resolve()方法，可以结合我们给定的两个参数最后生成绝对路径，最终指向的就是我们的index.js文件 
-    entry: {  
-        index: [  
-            path.resolve(__dirname, '../src/main.js')
-        ] 
-    },
+    
+    // entry: {  
+    //     index: [  
+    //         path.resolve(__dirname, '../src/main.js')
+    //     ] 
+    // },
+    entry:utils.entries,
+
     // 输出配置 
     output: {  // 输出路径是 myProject/output/static  
         path: path.resolve(__dirname, '../output'), 
@@ -45,15 +52,11 @@ var  webpackConf = {
         } 
     }, 
     plugins:[  
-        new HtmlWebpackPlugin({   
-            filename: 'index.html',  
-            template: path.resolve(__dirname, '../index.html'),  
-            inject: true  
-          })
+        // new HtmlWebpackPlugin({   
+        //     filename: 'index.html',  
+        //     template: path.resolve(__dirname, '../index.html'),  
+        //     inject: true  
+        //   })
         ]
  };
-// Object.keys(webpackConf.entry).forEach(function (name) { 
-//     var extras = ['webpack-hot-middleware/client?reload=1'];
-//     webpackConf.entry[name] = extras.concat(webpackConf.entry[name]);
-// });
  module.exports  = webpackConf;
