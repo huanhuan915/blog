@@ -1,7 +1,8 @@
 import VueRouter from  "vue-router";
 import Index from "../components/Index";
 import login from "../components/login";
-import reg from "../components/reg"
+import reg from "../components/reg";
+import admin from "../components/admin";
 
 const routes = [
 {
@@ -10,7 +11,7 @@ const routes = [
 },
 {
 	path:'/admin',
-	component:login
+	component:admin
 },
 {
 	path:'/admin/login',
