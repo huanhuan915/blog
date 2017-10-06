@@ -10,8 +10,8 @@ var webpackDevConf = merge(webPackBaseConf,{
     //     index: [  
     //         path.resolve(__dirname, '../src/main.js') 
     //     ]},
-    entry:utils.entries,
-    plugins:[  
+    entry:utils.entries(),
+    plugins:[
         // Webpack 1.0  
         // new webpack.optimize.OccurenceOrderPlugin(), 
         // Webpack 2.0 fixed this mispelling  

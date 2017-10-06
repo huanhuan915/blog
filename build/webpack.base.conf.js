@@ -14,7 +14,7 @@ var webpackConf = {
     //         path.resolve(__dirname, '../src/main.js')
     //     ] 
     // },
-    entry:utils.entries,
+    entry:utils.entries(),
 
     // 输出配置 
     output: {  // 输出路径是 myProject/output/static  
