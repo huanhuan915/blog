@@ -25,8 +25,7 @@ module.exports = function(app){
 						if (err) {
 							res.json({re_code: 2, re_msg: '登陆session创建失败'});
 						}else{
-							// req.session.loginUser = 1;
-							console.log(req.session);
+							req.session.loginUser = doc[0].username;
 							res.json({
 								re_code: 0,
 								re_msg: '登陆成功'
@@ -92,6 +91,14 @@ module.exports = function(app){
 	app.get('/admin',function(req,res){
 		var sess = req.session;
 		console.log(sess);
+		console.log(req);
+		if (req.session.loginUser) {
+			res.json({re_code:0});
+			console.log('yes');
+		}else{
+			res.json({re_code:1});
+			console.log('no');
+		}
 		// var loginUser = sess.loginUser;
 		// isLogined = !!loginUser;
 		// var isLogined = sess.
