@@ -93,11 +93,9 @@ module.exports = function(app){
 		console.log(sess);
 		console.log(req);
 		if (req.session.loginUser) {
-			res.json({re_code:0});
-			console.log('yes');
+			res.json({re_code:0});//用户已登陆
 		}else{
-			res.json({re_code:1});
-			console.log('no');
+			res.json({re_code:1});//用户未登陆
 		}
 		// var loginUser = sess.loginUser;
 		// isLogined = !!loginUser;
@@ -115,7 +113,7 @@ module.exports = function(app){
 					re_code: 2,
 					re_msg: '退出登录失败'
 				});
-				reurn;
+				console.log(err);
 			}
 			res.clearCookie(identityKey);
 			res.redirect('/');
