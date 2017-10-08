@@ -19,7 +19,7 @@
 			</li>
 			<li>
 				<router-link to="/admin/droped">
-					<img src="./images/droped.svg" alt="标签">
+					<img src="./images/droped.svg" alt="已删除">
 				</router-link>
 			</li>
 		</ul>
