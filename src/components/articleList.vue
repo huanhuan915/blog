@@ -1,4 +1,5 @@
 <template>
+<div id="main-wrapper">
 	<div id="articleList">
 		<div id="articleListHeader">
 			<div id="titleIcon"></div>
@@ -10,31 +11,31 @@
 		<div id="list">
 			<ul id="list-article">
 				<li>
-					<router-link to="/admin/articleList/detail">
+					<router-link to="/admin/articleList/001">
 						恩恩恩恩
 					</router-link>
 					<div class="time">2017-10-8</div>
 				</li>
 				<li>
-					<router-link to="/admin/articleList/detail">
-						ssssss朱欢欢aaaaaaaaaaaaaaa
+					<router-link to="/admin/articleList/002">
+						ssssss哈哈哈aaaaaaaaaaaaaaa
 					</router-link>
 					<div class="time">2017-10-8</div>
 				</li>
 				<li>
-					<router-link to="/admin/articleList/detail">
+					<router-link to="/admin/articleList/003">
 						好烦啊
 					</router-link>
 					<div class="time">2017-10-8</div>
 				</li>
 				<li>
-					<router-link to="/admin/articleList/detail">
+					<router-link to="/admin/articleList/004">
 						淡定朋友aaaaaaaaaaaaaaa
 					</router-link>
 					<div class="time">2017-10-8</div>
 				</li>
 				<li>
-					<router-link to="/admin/articleList/detail">
+					<router-link to="/admin/articleList/005">
 						啊啊啊啊啊啊啊啊啊啊啊啊aaaaaaaaaaaaaaa
 					</router-link>
 					<div class="time">2017-10-8</div>
@@ -43,6 +44,8 @@
 			</ul>
 		</div>
 	</div>
+	<router-view></router-view>
+</div>
 </template>
 
 <script>
@@ -67,6 +70,7 @@ export default{
 	border-right: 1px solid rgba(198, 196, 195, 0.62);
 	height: 100vh;
 	overflow: auto;
+	flex: none;
 }
 #articleListHeader{
 	width: 100%;

@@ -8,12 +8,12 @@ import user from '../../../components/user';
 import articleList from '../../../components/articleList';
 import tag from '../../../components/tag';
 import droped from '../../../components/droped';
-
+import articleDetail from '../../../components/articleDetail';
 Vue.use(Router);
 export default new Router({
 	routes: [
 		{
-			path: '/admin',
+			path: '/admin/:id/:id',
 			component: admin,
 			children: [
 				{
@@ -22,7 +22,14 @@ export default new Router({
 				},
 				{
 					path: '/admin/articleList',
-					component: articleList
+					component: articleList,
+					children: [
+						{
+							path: '/admin/articleList/:id',
+							component: articleDetail
+						}
+					]
+
 				},
 				{
 					path: '/admin/tag',
