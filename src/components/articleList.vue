@@ -12,7 +12,7 @@
 			<ul id="list-article">
 				<li>
 					<router-link to="/admin/articleList/001">
-						恩恩恩恩
+						ppppppppppppppp
 					</router-link>
 					<div class="time">2017-10-8</div>
 				</li>
@@ -24,13 +24,13 @@
 				</li>
 				<li>
 					<router-link to="/admin/articleList/003">
-						好烦啊
+						enenenenenenenene
 					</router-link>
 					<div class="time">2017-10-8</div>
 				</li>
 				<li>
 					<router-link to="/admin/articleList/004">
-						淡定朋友aaaaaaaaaaaaaaa
+						淡定saaaaaaaaaaaaaaa
 					</router-link>
 					<div class="time">2017-10-8</div>
 				</li>

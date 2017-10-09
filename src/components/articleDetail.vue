@@ -1,15 +1,15 @@
 <template>
-<div>
+<div id="articleDetail-wrapper">
 	<div id="articleDetail">
 		<div id="title">
-			
+			<input type="text" placeholder="请输入文章标题">
 		</div>
 		<div id="toolbar">
 			
 		</div>
 		<div id="editor">
-			<textarea :value="input" @input="update"></textarea>
-			<div v-html="compiledMarkdown"></div>
+			<textarea ref="area" cols="30" rows="10" id="field" v-model="message"></textarea>
+			<!-- <simple-mde v-model="message"></simple-mde> -->
 		</div>
 	</div>
 </div>
@@ -18,51 +18,50 @@
 <script>
 import Vue from "vue";
 import axios from 'axios';
+import marked from 'marked';
+import simplemde from 'simplemde';
+// import SimpleMde from './simple-mde.vue' 
+export default {
+	data() {
+      return { 
+      	message: 'ssssssssssssssssHello !!' 
+      }
+    },
+    // components: { 
+    // 	SimpleMde 
+    // },
+    methods:{
 
-export default{
-	el: '#editor',
-	  data: {
-	    input: '# hello'
-	  },
-	  computed: {
-	    compiledMarkdown: function () {
-	      return marked(this.input, { sanitize: true })
-	    }
-	  },
-	  methods: {
-	    update: _.debounce(function (e) {
-	      this.input = e.target.value
-	    }, 300)
-	  }
-
+    },
+    mounted(){
+    	this.mde = new simplemde({
+    		element: document.getElementById("field"),
+    		autoDownloadFontAwesome: true,
+    		status: false
+    	}),
+    	this.mde.value(this.message);
+    }
 }
 </script>
 <style scoped>
-#articleDetail{
+@import '../../node_modules/simplemde/src/css/simplemde.css';
+#articleDetail-wrapper{
 	flex: 1;
-
 }
-textarea, #editor div {
-  display: inline-block;
-  width: 49%;
-  height: 100%;
-  vertical-align: top;
-  box-sizing: border-box;
-  padding: 0 20px;
+#articleDetail{
+	
 }
 
-textarea {
-  border: none;
-  border-right: 1px solid #ccc;
-  resize: none;
-  outline: none;
-  background-color: #f6f6f6;
-  font-size: 14px;
-  font-family: 'Monaco', courier, monospace;
-  padding: 20px;
+#title{
+	width: 100%;
+	height: 50px;
+
+}
+#title input{
+	display: inline-block;
+	width: 100%;
+	height: 90%;
+	vertical-align: middle;
 }
 
-code {
-  color: #f66;
-}
 </style>

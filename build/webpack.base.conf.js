@@ -51,6 +51,9 @@ var webpackConf = {
             postcss: [require('autoprefixer')()]
         } 
     }, 
+    // node: {
+    //     fs:"empty"
+    // },
     plugins:[  
         // new HtmlWebpackPlugin({   
         //     filename: 'index.html',  

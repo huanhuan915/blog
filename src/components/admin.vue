@@ -52,6 +52,7 @@ export default{
 <style lang="less" scoped>
 #main-wrapper{
 	display: flex;
+	flex: 1;
 }
 #left-list{
 	width:90px;
