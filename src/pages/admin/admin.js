@@ -1,18 +1,14 @@
+
+
 import Vue from "vue";
 import App from "./app";
 import router from "./router";
 import axios from 'axios';
+
 // import VueRouter from "vue-router";
 
 Vue.config.debug = true;
 Vue.config.productionTip = false;
-///////////
-// Vue.use(VueRouter);
-// new Vue({
-// 	el:"#app",
-// 	router:router,//添加路由配置
-// 	render:h=>h(App)
-// });
 
 new Vue({
   el: '#app',
@@ -21,8 +17,8 @@ new Vue({
   components: { App },
   mounted:function(){
   	var loc = window.location.hash.slice(2);
-  	//如果是在admin的根路径下，向后端发送请求，如果用户已经登陆re_code==0，则直接跳到/admin
-  	//如果没有登陆则跳到/login,re_code==1_
+  	/*如果是在admin的根路径下，向后端发送请求，如果用户已经登陆re_code==0，则直接跳到/admin
+  	如果没有登陆则跳到/login,re_code==1_*/
   	if (loc=='') {
   		axios.get('/admin').then(function(res){
   			console.log('/请求success');

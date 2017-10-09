@@ -74,7 +74,7 @@ export default{
 }
 #articleListHeader{
 	width: 100%;
-	height: 30px;
+	height: 32px;
 	text-align: center;
 	padding: 25px 0 25px 0;
 	vertical-align: middle;
