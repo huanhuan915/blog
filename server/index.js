@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var User = require('../server/model');
+var Models = require('../server/model');
 module.exports = function(app){
 	//登陆返回re_code
 	//0登陆成功
@@ -12,7 +12,7 @@ module.exports = function(app){
 		var password = req.body.params.password;
 		console.log(req.body.params.username);
 		console.log('username:'+username+'\npassword:'+password);
-		User.find({'username':username},function(err,doc){
+		Models.User.find({'username':username},function(err,doc){
 			if (err) {
 				res.json({re_code: 3, re_msg: '查询数据库失败'});
 				console.log('用户登录时数据库查询失败');
@@ -42,7 +42,7 @@ module.exports = function(app){
 	});
 	app.post('/user/queUsername',function(req,res){
 		var username = req.body.params.username;
-		User.find({'username':username},
+		Models.User.find({'username':username},
 			function(err,doc){
 				if (err) {
 					console.log('注册时查询用户名是否存在，查询数据库出错');
@@ -68,7 +68,7 @@ module.exports = function(app){
 			password:password,
 			email:email
 		});
-		User.find({'username':username},function(err,doc){
+		Models.User.find({'username':username},function(err,doc){
 			if (err) {
 				console.log('查询数据库失败');
 				res.json({isReg:-1});
@@ -119,4 +119,31 @@ module.exports = function(app){
 			res.redirect('/');
 		});		
 	});
+	app.post('/article/save',function(req,res){
+		var artTitle = req.body.params.ArtTitle;
+		var artContent = req.body.params.ArtContent;
+		var thisDate = req.body.params.ThisDate;
+		var status = req.body.params.Status;
+		var tags = req.body.params.Tags;
+
+		var article = new Models.Article({
+			artTitle:artTitle,
+			artContent:artContent,
+			thisDate:thisDate,
+			status:status,
+			tags:tags
+		});
+		console.log(article.artTitle);
+		/*isSave:1保存成功，-1保存失败*/
+		// article.save(function(err){
+		// 	if (err) {
+		// 		console.log("article save error");
+		// 		res.json({isSave:-1});
+		// 	}else{
+		// 		console.log('article save success');
+		// 		res.json({isSave:1});
+		// 	}
+		// })
+		
+	})
 };

@@ -11,7 +11,7 @@ db.connection.once('open',function(){
 		console.log('\nmongodb connect success\n');
 	})
 /*创建schema*/
-var UserSchema = new mongoose.Schema({
+var userSchema = new mongoose.Schema({
 	username:String,
 	password:String,
 	email:String
@@ -34,6 +34,11 @@ var userInfoSchema = new mongoose.Schema({
 })
 
 /*创建Model*/
-var User = mongoose.model('User',UserSchema);
+var Models = {
+	User: mongoose.model('User', userSchema),
+	Article: mongoose.model('Article', articleSchema),
+	Tag: mongoose.model('Tag', tagSchema),
+    UserInfo: mongoose.model('UserInfo', userInfoSchema)
+}
 /*model.js模块输出model对象*/
-module.exports = User;
+module.exports = Models;

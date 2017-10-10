@@ -40,11 +40,15 @@ export default {
     		axios.post('/article/save',{
     			params: {
     				ArtTitle: title,
-    				ArtContent: content
+    				ArtContent: content,
+                    ThisData: 'Date',
+                    Status: 'writingssssssss',
+                    Tags: []
     			}
     		})
     		.then(function(res){
     			//保存成功回调
+                console.log(res);
     		},function(err){
     			console.log(err);
     		})
