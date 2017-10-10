@@ -16,7 +16,22 @@ var UserSchema = new mongoose.Schema({
 	password:String,
 	email:String
 });
-
+var articleSchema = new mongoose.Schema({
+	title: String,
+	data: Date,
+	articleContent: String,
+	status: String,
+	tags: []
+});
+var tagSchema = new mongoose.Schema({
+	tagName: String,
+	tagNumber: Number
+});
+var userInfoSchema = new mongoose.Schema({
+	name: String,
+	sign: String,
+	intro: String
+})
 
 /*创建Model*/
 var User = mongoose.model('User',UserSchema);
