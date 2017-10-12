@@ -125,25 +125,23 @@ module.exports = function(app){
 		var thisDate = req.body.params.ThisDate;
 		var status = req.body.params.Status;
 		var tags = req.body.params.Tags;
-
+		console.log(req.body.params);
 		var article = new Models.Article({
-			artTitle:artTitle,
-			artContent:artContent,
-			thisDate:thisDate,
+			title:artTitle,
+			date:thisDate,
+			articleContent:artContent,
 			status:status,
 			tags:tags
 		});
-		console.log(article.artTitle);
-		/*isSave:1保存成功，-1保存失败*/
-		// article.save(function(err){
-		// 	if (err) {
-		// 		console.log("article save error");
-		// 		res.json({isSave:-1});
-		// 	}else{
-		// 		console.log('article save success');
-		// 		res.json({isSave:1});
-		// 	}
-		// })
+		article.save(function(err){
+			if (err) {
+				console.log("article save error");
+				res.json({isSave:-1});
+			}else{
+				console.log('article save success');
+				res.json({isSave:1});
+			}
+		})
 		
 	})
 };

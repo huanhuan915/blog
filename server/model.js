@@ -1,8 +1,8 @@
 /*
 链接数据库并输出Model对象 
  */
-
 var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 /*链接数据库*/
 var db = mongoose.connect('mongodb://localhost:27017/userInfo');
 /*检验数据库是否连接成功*/

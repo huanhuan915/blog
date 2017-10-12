@@ -130,7 +130,7 @@ export default {
 #toolbar div{
 	display: inline-block;
 	height: 30px;
-	width: 50px;
+	width: 70px;
 	text-align: center;
 	margin-right: 30px;
 	position: relative;
@@ -139,12 +139,19 @@ export default {
 	border: 1px solid #c0c1d5;
 	background-color: #e3e5f3;
 }
+#toolbar div:hover{
+    background-color: #b5cbf1;
+}
 #editor{
 	flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+#editor .CodeMirror {
+    flex:1;
 }
 a{
 	text-decoration: none;
 	color: black;
 }
-
 </style>
