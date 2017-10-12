@@ -26,9 +26,10 @@ import highlight from 'highlight.js'
 export default {
 	data() {
       return { 
-      	message: 'ssssssssssssssssHello !!' ,
+      	message: '' ,
       	mde: undefined,
-      	title: '      请输入文章标题......'
+      	title: '      请输入文章标题......',
+        status:'writing'
       }
     },
     methods:{
@@ -42,11 +43,16 @@ export default {
     				ArtTitle: title,
     				ArtContent: content,
                     ThisData: 'Date',
-                    Status: 'writingssssssss',
+                    Status: this.status,
                     Tags: []
     			}
     		})
     		.then(function(res){
+                if (res.data.isSave==1) {
+                    alert('保存成功');
+                }else{
+                    alert('保存失败');
+                }
     			//保存成功回调
                 console.log(res);
     		},function(err){
@@ -57,7 +63,9 @@ export default {
     		})
     	},
     	post: function(){
+            this.status = 'publish'
     		console.log("post Art");
+            //.....等等再写
     	}
     },
     mounted(){

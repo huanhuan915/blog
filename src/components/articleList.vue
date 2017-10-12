@@ -6,41 +6,14 @@
 			<div id="articleListTitle">
 				文章列表
 			</div>
-			<div id="addArticle"><img src="./images/add.svg" alt=""></div>
+			<div id="addArticle"><img src="./images/add.svg" alt="新建" @click="add"></div>
 		</div>
 		<div id="list">
 			<ul id="list-article">
-				<li>
-					<router-link to="/admin/articleList/001">
-						ppppppppppppppp
-					</router-link>
+				<li v-for='item in items'>
+					<router-link to="/admin/articleList/001">{{item.title}}</router-link>
 					<div class="time">2017-10-8</div>
 				</li>
-				<li>
-					<router-link to="/admin/articleList/002">
-						ssssss哈哈哈aaaaaaaaaaaaaaa
-					</router-link>
-					<div class="time">2017-10-8</div>
-				</li>
-				<li>
-					<router-link to="/admin/articleList/003">
-						enenenenenenenene
-					</router-link>
-					<div class="time">2017-10-8</div>
-				</li>
-				<li>
-					<router-link to="/admin/articleList/004">
-						淡定saaaaaaaaaaaaaaa
-					</router-link>
-					<div class="time">2017-10-8</div>
-				</li>
-				<li>
-					<router-link to="/admin/articleList/005">
-						啊啊啊啊啊啊啊啊啊啊啊啊aaaaaaaaaaaaaaa
-					</router-link>
-					<div class="time">2017-10-8</div>
-				</li>
-
 			</ul>
 		</div>
 	</div>
@@ -56,9 +29,29 @@ export default{
 	data(){
 		return {
 			items: [],
+			title: '请输入文章标题......',
 		}
 	},
 	methods:{
+		add: function(){
+			var item={
+				_id: '',
+				title: this.title,
+				articleContent:'',
+				status: 'writing',
+				tags: []
+			};
+			this.items.unshift(item);
+		}
+	},
+	mounted(){
+		axios.get('/article/articleList').then(function(res){
+			this.items = res.data;
+		}.bind(this)).catch(function(error){
+			console.log(error);
+		});
+		console.log(this.items);
+		console.log(this.items[0]);
 
 	}
 
@@ -89,7 +82,12 @@ export default{
 #articleListHeader img{
 	height: 25px;
 	width: 25px;
-	padding-left: 20px;
+	margin-left: 55px;
+	border: 1px solid #fff;
+}
+#articleListHeader img:hover{
+	border-radius: 13px;
+	border: 1px solid lightgray;
 }
 #list ul{
 	margin: 0;

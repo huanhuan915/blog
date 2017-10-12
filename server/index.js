@@ -133,15 +133,26 @@ module.exports = function(app){
 			status:status,
 			tags:tags
 		});
+		console.log(article);
 		article.save(function(err){
 			if (err) {
 				console.log("article save error");
-				res.json({isSave:-1});
+				res.json({isSave:-1,articleId:''});
 			}else{
 				console.log('article save success');
-				res.json({isSave:1});
+				res.json({isSave:1,articleId:article._id});
 			}
 		})
 		
+	});
+	//查询文章列表
+	app.get('/article/articleList',function(req,res){
+		Models.Article.find({status:"publish"},function(err,docs){
+			if (err) {
+				console.log(err);
+				return;
+			}
+			res.json(docs);
+		})
 	})
 };
