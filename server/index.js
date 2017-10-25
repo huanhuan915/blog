@@ -97,14 +97,6 @@ module.exports = function(app){
 		}else{
 			res.json({re_code:1});//用户未登陆
 		}
-		// var loginUser = sess.loginUser;
-		// isLogined = !!loginUser;
-		// var isLogined = sess.
-		// if (sess.loginUser) {
-		// 	console.log("用户已登陆");
-		// }else{
-		// 	console.log("用户未登陆");
-		// }
 	});
 	app.get('/logout',function(req,res,next){
 		req.session.destroy(function(err){
@@ -125,7 +117,7 @@ module.exports = function(app){
 		var thisDate = req.body.params.ThisDate;
 		var status = req.body.params.Status;
 		var tags = req.body.params.Tags;
-		console.log(req.body.params);
+		var id = req.body.params.id;
 		var article = new Models.Article({
 			title:artTitle,
 			date:thisDate,
@@ -133,7 +125,6 @@ module.exports = function(app){
 			status:status,
 			tags:tags
 		});
-		console.log(article);
 		article.save(function(err){
 			if (err) {
 				console.log("article save error");
@@ -143,7 +134,40 @@ module.exports = function(app){
 				res.json({isSave:1,articleId:article._id});
 			}
 		})
-		
+		// Models.Article.find({'_id':id},function(err,doc){
+		// 	if (err) {
+		// 		console.log('文章查询失败');
+		// 		res.json({isExit:0});
+		// 	}else{
+		// 		if (doc[0]) {
+		// 			//update
+		// 			Models.Article.findByIdAndUpdate(id,{
+		// 				title:artTitle,
+		// 				articleContent:artContent,
+		// 				status:status},function(err,docs){
+
+		// 				})
+		// 			res.json({isExit:1});
+		// 		}else{
+		// 			var article = new Models.Article({
+		// 				title:artTitle,
+		// 				date:thisDate,
+		// 				articleContent:artContent,
+		// 				status:status,
+		// 				tags:tags
+		// 			});
+		// 			article.save(function(err){
+		// 				if (err) {
+		// 					console.log("article save error");
+		// 					res.json({isSave:-1,articleId:''});
+		// 				}else{
+		// 					console.log('article save success');
+		// 					res.json({isSave:1,articleId:article._id});
+		// 				}
+		// 			})
+		// 		}
+		// 	}
+		// })	
 	});
 	//查询文章列表
 	app.get('/article/articleList',function(req,res){

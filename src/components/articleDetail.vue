@@ -22,10 +22,13 @@ import Vue from "vue";
 import axios from 'axios';
 import marked from 'marked';
 import simplemde from 'simplemde';
-import highlight from 'highlight.js'
+import highlight from 'highlight.js';
+
+import bus from './assets/Bus.js';
 export default {
 	data() {
       return { 
+        id:'',
       	message: '' ,
       	mde: undefined,
       	title: '      请输入文章标题......',
@@ -34,17 +37,14 @@ export default {
     },
     methods:{
     	save: function(){
-    		var title = this.title;
-    		var content = this.mde.value();
-    		console.log("title:"+title);
-    		console.log("content"+content);
     		axios.post('/article/save',{
     			params: {
-    				ArtTitle: title,
-    				ArtContent: content,
+    				ArtTitle: this.title,
+    				ArtContent: this.message,
                     ThisData: 'Date',
                     Status: this.status,
-                    Tags: []
+                    Tags: [],
+                    id: this.id
     			}
     		})
     		.then(function(res){
@@ -60,12 +60,33 @@ export default {
     		})
     		.catch(function(){
     			console.log("error")
-    		})
+    		});
     	},
     	post: function(){
             this.status = 'publish'
-    		console.log("post Art");
-            //.....等等再写
+            axios.post('/article/save',{
+                params: {
+                    ArtTitle: this.title,
+                    ArtContent: this.message,
+                    ThisData: 'Date',
+                    Status: this.status,
+                    Tags: []
+                }
+            })
+            .then(function(res){
+                if (res.data.isSave==1) {
+                    alert('发布成功');
+                }else{
+                    alert('发布失败');
+                }
+                //保存成功回调
+                console.log(res);
+            },function(err){
+                console.log(err);
+            })
+            .catch(function(){
+                console.log("error")
+            })
     	}
     },
     mounted(){
@@ -76,7 +97,7 @@ export default {
     		status: ['autosave','lines','words','cursor'],
     		lineWrapping: false,
     		renderingConfig: {
-    		  codeSyntaxHighlighting: true
+                codeSyntaxHighlighting: true
     		},
     		initialValue: "",
     		tabSize: 4,
@@ -89,8 +110,14 @@ export default {
     		  'bold', 'italic', 'heading', 'quote', 'unordered-list', 'ordered-list', 
     		  'link', 'image', 'table', 'code', 'fullscreen', 'side-by-side' , 'guide'
     		],
-    	})
-    	// this.mde.value(this.message);
+    	});
+    },
+    created: function(){
+        bus.$on('change',function(item){
+            this.title = item.title;
+            this.mde.value(item.articleContent);
+            this.id = item._id;
+        }.bind(this));
     }
 }
 </script>

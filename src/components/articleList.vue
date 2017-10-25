@@ -11,7 +11,8 @@
 		<div id="list">
 			<ul id="list-article">
 				<li v-for='item in items'>
-					<router-link to="/admin/articleList/001">{{item.title}}</router-link>
+					<div @click="articlePreview(item)">{{item.title}}</div>
+					<!-- <router-link @click="articlePreview(item._id)">{{item.title}}</router-link> -->
 					<div class="time">2017-10-8</div>
 				</li>
 			</ul>
@@ -24,6 +25,7 @@
 <script>
 import Vue from "vue";
 import axios from 'axios';
+import bus from './assets/Bus.js';
 
 export default{
 	data(){
@@ -42,6 +44,15 @@ export default{
 				tags: []
 			};
 			this.items.unshift(item);
+		},
+		articlePreview: function(item){
+			if(this.$route.path=='/admin/articleList'){
+				this.$router.push('articleList/'+item._id);
+			}else{
+				this.$router.replace({ path: item._id });
+			}
+			console.log(this.$route.path);
+			bus.$emit('change',item);
 		}
 	},
 	mounted(){

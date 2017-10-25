@@ -69,7 +69,7 @@ export default{
 					//3数据库查询失败
 					if (res.data.re_code===0) {
 						alert("登录成功");
-						window.location = '/admin.html#/admin'
+						window.location = '/admin.html#/admin/user'
 					}else if (res.data.re_code===1) {
 						alert("用户名或密码错误，请重试");
 						this.username = '';

@@ -13,7 +13,7 @@ Vue.use(Router);
 export default new Router({
 	routes: [
 		{
-			path: '/admin/:id/:id',
+			path: '/admin',
 			component: admin,
 			children: [
 				{
