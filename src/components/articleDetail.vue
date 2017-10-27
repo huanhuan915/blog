@@ -11,7 +11,6 @@
 		</div>
 		<div id="editor">
 			<textarea id="field" v-model="message"></textarea>
-			<!-- <simple-mde v-model="message"></simple-mde> -->
 		</div>
 	</div>
 </div>
@@ -37,6 +36,8 @@ export default {
     },
     methods:{
     	save: function(){
+            console.log(this.$route.path);
+            this.message = this.mde.value();
     		axios.post('/article/save',{
     			params: {
     				ArtTitle: this.title,
@@ -49,17 +50,16 @@ export default {
     		})
     		.then(function(res){
                 if (res.data.isSave==1) {
+                    this.$router.replace({ path: res.data.articleId });
                     alert('保存成功');
                 }else{
                     alert('保存失败');
                 }
-    			//保存成功回调
-                console.log(res);
-    		},function(err){
+    		}.bind(this),function(err){
     			console.log(err);
     		})
-    		.catch(function(){
-    			console.log("error")
+    		.catch(function(err){
+    			console.log(err)
     		});
     	},
     	post: function(){

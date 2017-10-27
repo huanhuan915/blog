@@ -118,60 +118,50 @@ module.exports = function(app){
 		var status = req.body.params.Status;
 		var tags = req.body.params.Tags;
 		var id = req.body.params.id;
-		var article = new Models.Article({
-			title:artTitle,
-			date:thisDate,
-			articleContent:artContent,
-			status:status,
-			tags:tags
-		});
-		article.save(function(err){
+		Models.Article.find({'_id':id},function(err,doc){
 			if (err) {
-				console.log("article save error");
-				res.json({isSave:-1,articleId:''});
+				console.log('文章查询失败');
+				res.json({isExit:-1});
 			}else{
-				console.log('article save success');
-				res.json({isSave:1,articleId:article._id});
+				if (doc[0]) {
+					//文章存在，update
+					Models.Article.findByIdAndUpdate(id,{
+						title:artTitle,
+						articleContent:artContent,
+						status:status},function(err,docs){
+							if(err){
+								console.log(err);
+							}else{
+								console.log('update success');
+								res.json({update:1});
+							}
+						})
+					res.json({isExit:1});//
+				}else{
+					//不存在 save
+					var article = new Models.Article({
+						title:artTitle,
+						date:thisDate,
+						articleContent:artContent,
+						status:status,
+						tags:tags
+					});
+					article.save(function(err){
+						if (err) {
+							console.log("article save error");
+							res.json({isSave:-1,articleId:''});
+						}else{
+							console.log('article save success');
+							res.json({isSave:1,articleId:article._id});
+						}
+					})
+				}
 			}
-		})
-		// Models.Article.find({'_id':id},function(err,doc){
-		// 	if (err) {
-		// 		console.log('文章查询失败');
-		// 		res.json({isExit:0});
-		// 	}else{
-		// 		if (doc[0]) {
-		// 			//update
-		// 			Models.Article.findByIdAndUpdate(id,{
-		// 				title:artTitle,
-		// 				articleContent:artContent,
-		// 				status:status},function(err,docs){
-
-		// 				})
-		// 			res.json({isExit:1});
-		// 		}else{
-		// 			var article = new Models.Article({
-		// 				title:artTitle,
-		// 				date:thisDate,
-		// 				articleContent:artContent,
-		// 				status:status,
-		// 				tags:tags
-		// 			});
-		// 			article.save(function(err){
-		// 				if (err) {
-		// 					console.log("article save error");
-		// 					res.json({isSave:-1,articleId:''});
-		// 				}else{
-		// 					console.log('article save success');
-		// 					res.json({isSave:1,articleId:article._id});
-		// 				}
-		// 			})
-		// 		}
-		// 	}
-		// })	
+		})	
 	});
 	//查询文章列表
 	app.get('/article/articleList',function(req,res){
-		Models.Article.find({status:"publish"},function(err,docs){
+		Models.Article.find({},function(err,docs){
 			if (err) {
 				console.log(err);
 				return;

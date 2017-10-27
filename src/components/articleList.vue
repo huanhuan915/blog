@@ -37,7 +37,7 @@ export default{
 	methods:{
 		add: function(){
 			var item={
-				_id: '',
+				_id: '0',
 				title: this.title,
 				articleContent:'',
 				status: 'writing',
