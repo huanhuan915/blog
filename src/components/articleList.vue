@@ -9,11 +9,11 @@
 			<div id="addArticle"><img src="./images/add.svg" alt="新建" @click="add"></div>
 		</div>
 		<div id="list">
-			<ul id="list-article">
-				<li v-for='item in items'>
-					<div @click="articlePreview(item)">{{item.title}}</div>
-					<!-- <router-link @click="articlePreview(item._id)">{{item.title}}</router-link> -->
-					<div class="time">2017-10-8</div>
+			<ul id="list-article" >
+				<li v-for='item in items' v-bind="{id:item._id}" @mouseenter="show($event)" @mouseleave="hide($event)">
+					<div class="tit" @click="articlePreview(item)">{{item.title}}</div>
+					<div class ="delArticle" ref="delArticle" style="display: none;"><img src="./images/del.svg" alt="删除" @click="del(item)"></div>
+					<div class="time">{{item.date}}</div>
 				</li>
 			</ul>
 		</div>
@@ -32,6 +32,8 @@ export default{
 		return {
 			items: [],
 			title: '请输入文章标题......',
+			ev_left: 0,
+			ev_right: 0
 		}
 	},
 	methods:{
@@ -41,9 +43,13 @@ export default{
 				title: this.title,
 				articleContent:'',
 				status: 'writing',
-				tags: []
+				tags: [],
+				date: ''
 			};
 			this.items.unshift(item);
+			var d = new Date();
+			item.date = d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes();
+
 		},
 		articlePreview: function(item){
 			if(this.$route.path=='/admin/articleList'){
@@ -53,6 +59,36 @@ export default{
 			}
 			console.log(this.$route.path);
 			bus.$emit('change',item);
+		},
+		// showRightMenu:function(ev){
+		// 	ev.preventDefault;
+		// 	this.seen = true;
+		// 	this.ev_left = ev.layerX;
+		// 	this.ev_top = ev.layerY;
+		// },
+		// closeRightMenu:function(ev){
+		// 	this.seen = false;
+		// },
+		del:function(item){
+			axios.post('/article/del',{
+				params: {
+					id:item._id
+				}
+			}).then(function(res){
+
+			}.bind(this)).catch(function(err){
+				console.log(err);
+			});
+		},
+		show:function(ev){
+			var hoverItem = ev.target.id;
+			var targetEle = document.getElementById(hoverItem);
+			targetEle.childNodes[2].style.display = 'inline-block';
+		},
+		hide:function(ev){
+			var hoverItem = ev.target.id;
+			var targetEle = document.getElementById(hoverItem);
+			targetEle.childNodes[2].style.display = 'none';
 		}
 	},
 	mounted(){
@@ -61,11 +97,8 @@ export default{
 		}.bind(this)).catch(function(error){
 			console.log(error);
 		});
-		console.log(this.items);
-		console.log(this.items[0]);
-
+		// console.log(this.$refs.delArticle.style);
 	}
-
 }
 </script>
 <style scoped>
@@ -112,6 +145,13 @@ export default{
 	border-bottom: 1px solid rgba(198, 196, 195, 0.62);
 	margin: 0 15px;
 	padding-top: 15px;
+	
+	position: relative;
+}
+#list ul li .tit{
+	display: inline-block;
+	width: 160px;
+	height: 20px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -132,5 +172,16 @@ a{
 }
 a:hover{
 	color: blue;
+}
+.delArticle{
+	display: inline-block;
+	border-radius: 13px;
+	border: 1px solid lightgray;
+	width: 18px;
+	height: 18px;
+}
+.delArticle img{
+	width: 18px;
+	height: 18px;
 }
 </style>

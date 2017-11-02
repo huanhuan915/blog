@@ -118,44 +118,49 @@ module.exports = function(app){
 		var status = req.body.params.Status;
 		var tags = req.body.params.Tags;
 		var id = req.body.params.id;
+		console.log(req.body.params);
 		Models.Article.find({'_id':id},function(err,doc){
 			if (err) {
-				console.log('文章查询失败');
-				res.json({isExit:-1});
+				var article = new Models.Article({
+					title:artTitle,
+					date:thisDate,
+					articleContent:artContent,
+					status:status,
+					tags:tags
+				});
+				article.save(function(err){
+					if (err) {
+						console.log("article save error");
+						res.json({isSave:-1,articleId:''});
+					}else{
+						console.log('article save success');
+						res.json({isSave:1,articleId:article._id});
+					}
+				});
+				// console.log('文章查询失败');
+				// console.log(err);
+				// res.json({isExit:-1});
 			}else{
-				if (doc[0]) {
-					//文章存在，update
-					Models.Article.findByIdAndUpdate(id,{
-						title:artTitle,
-						articleContent:artContent,
-						status:status},function(err,docs){
-							if(err){
-								console.log(err);
-							}else{
-								console.log('update success');
-								res.json({update:1});
-							}
-						})
-					res.json({isExit:1});//
-				}else{
-					//不存在 save
-					var article = new Models.Article({
-						title:artTitle,
-						date:thisDate,
-						articleContent:artContent,
-						status:status,
-						tags:tags
-					});
-					article.save(function(err){
-						if (err) {
-							console.log("article save error");
-							res.json({isSave:-1,articleId:''});
+				Models.Article.findByIdAndUpdate(id,{
+					title:artTitle,
+					articleContent:artContent,
+					status:status},function(err,docs){
+						if(err){
+							console.log(err);
+							res.json({update:-1});
 						}else{
-							console.log('article save success');
-							res.json({isSave:1,articleId:article._id});
+							console.log('update success');
+							res.json({update:1});
 						}
-					})
-				}
+					});
+				// if (doc[0]) {
+				// 	//文章存在，update
+					
+				// 	// res.json({isExit:1});//
+				// }else{
+				// 	//不存在 save
+					
+				// }
 			}
 		})	
 	});
@@ -168,5 +173,18 @@ module.exports = function(app){
 			}
 			res.json(docs);
 		})
+	});
+	app.post('/article/del',function(req,res){
+		console.log(req.body.params.id);
+		Models.Article.findOneAndRemove({_id:req.body.params.id},function(err,docs){
+			if (err) {
+				console.log(error);
+				res.json({del:-1});
+			}else{
+				console.log('del success');
+				res.json({del:1});
+			}
+		})
+
 	})
 };

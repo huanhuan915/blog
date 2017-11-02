@@ -31,7 +31,8 @@ export default {
       	message: '' ,
       	mde: undefined,
       	title: '      请输入文章标题......',
-        status:'writing'
+        status:'writing',
+        date: ''
       }
     },
     methods:{
@@ -42,15 +43,16 @@ export default {
     			params: {
     				ArtTitle: this.title,
     				ArtContent: this.message,
-                    ThisData: 'Date',
+                    ThisDate: this.date,
                     Status: this.status,
                     Tags: [],
                     id: this.id
     			}
     		})
     		.then(function(res){
-                if (res.data.isSave==1) {
+                if (res.data.isSave==1 || res.data.update==1) {
                     this.$router.replace({ path: res.data.articleId });
+                    this.id = res.data.articleId;
                     alert('保存成功');
                 }else{
                     alert('保存失败');
@@ -68,7 +70,7 @@ export default {
                 params: {
                     ArtTitle: this.title,
                     ArtContent: this.message,
-                    ThisData: 'Date',
+                    ThisDate: this.date,
                     Status: this.status,
                     Tags: []
                 }
@@ -117,6 +119,7 @@ export default {
             this.title = item.title;
             this.mde.value(item.articleContent);
             this.id = item._id;
+            this.date = item.date;
         }.bind(this));
     }
 }
