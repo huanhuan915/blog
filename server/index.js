@@ -63,7 +63,7 @@ module.exports = function(app){
 		var username = req.body.params.username;
 		var password = req.body.params.password;
 		var email = req.body.params.email;
-		var user = new User({
+		var user = new Models.User({
 			username:username,
 			password:password,
 			email:email
@@ -175,16 +175,20 @@ module.exports = function(app){
 		})
 	});
 	app.post('/article/del',function(req,res){
-		console.log(req.body.params.id);
-		Models.Article.findOneAndRemove({_id:req.body.params.id},function(err,docs){
-			if (err) {
-				console.log(error);
-				res.json({del:-1});
-			}else{
-				console.log('del success');
-				res.json({del:1});
-			}
-		})
-
+		var idToDel = req.body.params.id;
+		console.log(idToDel);
+		if (0==idToDel) {
+			console.log("该文章不存在");
+		}else{
+			Models.Article.findOneAndRemove({_id:idToDel},function(err,docs){
+				if (err) {
+					console.log(error);
+					res.json({del:-1});
+				}else{
+					console.log('del success');
+					res.json({del:1});
+				}
+			})
+		}
 	})
 };

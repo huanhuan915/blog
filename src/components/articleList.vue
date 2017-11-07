@@ -46,9 +46,18 @@ export default{
 				tags: [],
 				date: ''
 			};
-			this.items.unshift(item);
+			if (!this.items[0]) {
+				this.items[0] = item;
+				this.$router.push('articleList/'+item._id);
+				console.log(this.$route.params);
+			}else if(0 == this.items[0]._id){
+				return;
+			}else{
+				this.items.unshift(item);
+			}
 			var d = new Date();
 			item.date = d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes();
+			bus.$emit('addArticle',item);
 
 		},
 		articlePreview: function(item){
@@ -70,12 +79,38 @@ export default{
 		// 	this.seen = false;
 		// },
 		del:function(item){
+			if (0==item._id) {
+				if (this.items.length==1) {
+					this.items.shift(item);
+					console.log('this.items.length==1')
+					//将添加文章时在路由上新增的0去掉
+					//..........................
+					//..........................
+					//..........................
+					//..........................
+					//..........................
+					//..........................
+					//..........................
+					// this.$router.replace({path: ''});
+					this.$router.back();
+					// delete this.$route.params.id;
+					console.log(this.$route.params);
+					return;
+				}else{
+					console.log('111');
+					this.items.shift(item);
+					bus.$emit('init',this.items[0]);
+				}
+				
+				// this.$router.replace({ path: '/admin/articleList'});
+				
+			}
 			axios.post('/article/del',{
 				params: {
 					id:item._id
 				}
 			}).then(function(res){
-
+				bus.$emit('init',this.items[0]);
 			}.bind(this)).catch(function(err){
 				console.log(err);
 			});
@@ -94,6 +129,12 @@ export default{
 	mounted(){
 		axios.get('/article/articleList').then(function(res){
 			this.items = res.data;
+			if (this.items.length==0) {
+				this.$router.replace({ path: '/admin/articleList'});
+				//不显示文章详情组件，去除
+			}else{
+				bus.$emit('init',this.items[0]);
+			}
 		}.bind(this)).catch(function(error){
 			console.log(error);
 		});

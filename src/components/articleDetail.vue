@@ -121,6 +121,18 @@ export default {
             this.id = item._id;
             this.date = item.date;
         }.bind(this));
+        bus.$on('addArticle',function(item){
+            this.title = item.title;
+            this.mde.value(item.articleContent);
+            this.id = item._id;
+            this.date = item.date;
+        }.bind(this));
+        bus.$on('init',function(item){
+            this.title = item.title;
+            this.mde.value(item.articleContent);
+            this.id = item._id;
+            this.date = item.date;
+        }.bind(this));
     }
 }
 </script>

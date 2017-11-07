@@ -73,9 +73,10 @@ export default{
 						alert('注册失败，请稍后重试或联系管理员');
 					}else if (res.data.isReg==0) {
 						alert('您已注册,请登陆');
+						window.location = '/admin.html#/login'
 					}else{
 						alert('注册成功，请登录');
-						window.location = '/login';
+						window.location = '/admin.html#/login';
 					}
 				}.bind(this), function(){
 					console.log("/user/reg 请求错误");

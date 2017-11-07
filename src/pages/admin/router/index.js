@@ -4,7 +4,7 @@ import Router from 'vue-router';
 import login from '../../../components/login';
 import reg from '../../../components/reg';
 import admin from '../../../components/admin';
-import user from '../../../components/user';
+import user from '../../../components/User';
 import articleList from '../../../components/articleList';
 import tag from '../../../components/tag';
 import droped from '../../../components/droped';
