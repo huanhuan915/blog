@@ -32,12 +32,15 @@ export default {
       	mde: undefined,
       	title: '      请输入文章标题......',
         status:'writing',
-        date: ''
+        date: '',
+        userName:''
       }
     },
     methods:{
     	save: function(){
-            console.log(this.$route.path);
+            console.log('点击了save按钮'+this.userName);
+
+
             this.message = this.mde.value();
     		axios.post('/article/save',{
     			params: {
@@ -46,14 +49,30 @@ export default {
                     ThisDate: this.date,
                     Status: this.status,
                     Tags: [],
-                    id: this.id
+                    id: this.id,
+                    userName: this.userName
     			}
     		})
     		.then(function(res){
-                if (res.data.isSave==1 || res.data.update==1) {
+                if (res.data.isSave==1) {
                     this.$router.replace({ path: res.data.articleId });
-                    this.id = res.data.articleId;
+                    // this.id = res.data.articleId;
                     alert('保存成功');
+                    var items = res.data.newArticleList;
+                    bus.$emit('articleSaveSuccess',items);
+                    axios.get('/admin').then(function(res){
+                        if (res.data.re_code==0) {
+                            //用户已经登陆
+                            var userName = res.data.userName;
+                            console.log('当前登录的用户为'+userName);
+                            bus.$emit('userName',userName);
+                        }else{
+                            alert("文章信息已保存，您的登陆信息已失效，请重新登陆");
+                            window.location = '/admin.html#/login';
+                        }
+                    }).catch(function(err){
+                        console.log(err);
+                    });
                 }else{
                     alert('保存失败');
                 }
@@ -113,6 +132,18 @@ export default {
     		  'link', 'image', 'table', 'code', 'fullscreen', 'side-by-side' , 'guide'
     		],
     	});
+        axios.get('/admin').then(function(res){
+            if (res.data.re_code==0) {
+                //用户已经登陆
+                var userName = res.data.userName;
+                this.userName = userName;
+            }else{
+                alert("您的登陆信息已失效，请重新登陆");
+                window.location = '/admin.html#/login';
+            }
+        }.bind(this)).catch(function(err){
+            console.log(err);
+        });
     },
     created: function(){
         bus.$on('change',function(item){

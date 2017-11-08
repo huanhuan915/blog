@@ -4,7 +4,7 @@ import Vue from "vue";
 import App from "./app";
 import router from "./router";
 import axios from 'axios';
-
+import bus from '../../components/assets/Bus.js'
 // import VueRouter from "vue-router";
 
 Vue.config.debug = true;
@@ -23,6 +23,7 @@ new Vue({
   		axios.get('/admin').then(function(res){
   			console.log('/请求success');
   			if (res.data.re_code===0) {
+          bus.$emit('userName',res.data.userName);
   				window.location.hash = '#/admin';
   			}else{
   				window.location.hash = '#/login';

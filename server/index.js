@@ -7,6 +7,7 @@ module.exports = function(app){
 	//1账号或密码错误
 	//2session会话创建失败
 	//3数据库查询失败
+	//-1登陆超时
 	app.post('/user/login',function(req,res){
 		var username = req.body.params.username;
 		var password = req.body.params.password;
@@ -17,26 +18,33 @@ module.exports = function(app){
 				res.json({re_code: 3, re_msg: '查询数据库失败'});
 				console.log('用户登录时数据库查询失败');
 			}else{
-				if (doc[0].password===password) {
-					console.log('登陆验证通过');
-					console.log(doc[0].username)
-					// res.json({login:"success"});
-					req.session.regenerate(function(err){
-						if (err) {
-							res.json({re_code: 2, re_msg: '登陆session创建失败'});
-						}else{
-							req.session.loginUser = doc[0].username;
-							res.json({
-								re_code: 0,
-								re_msg: '登陆成功'
-							})
-						}
-					});
-					console.log(req.session);
+				console.log(doc[0]);
+				console.log(password);
+				if (doc[0]) {
+					if (doc[0].password===password) {
+						console.log('登陆验证通过');
+						console.log(doc[0].username)
+						req.session.regenerate(function(err){
+							if (err) {
+								res.json({re_code: 2, re_msg: '登陆session创建失败'});
+							}else{
+								req.session.loginUser = doc[0].username;
+								res.json({
+									re_code: 0,
+									re_msg: '登陆成功'
+								})
+							}
+						});
+						console.log(req.session);
+					}else{
+						console.log('密码错误');
+						res.json({re_code: 1,re_msg: '账号或密码错误'});
+					}
 				}else{
-					console.log('密码错误');
-					res.json({re_code: 1,re_msg: '账号或密码错误'});
+					//该用户不存在
+					res.json({re_code: 4,re_msg: '该用户不存在'});
 				}
+				
 			}
 		});
 	});
@@ -87,15 +95,16 @@ module.exports = function(app){
 			}
 		})
 	});
-
+	//判断当前访问的用户的登陆状态
 	app.get('/admin',function(req,res){
 		var sess = req.session;
 		console.log(sess);
-		console.log(req);
 		if (req.session.loginUser) {
-			res.json({re_code:0});//用户已登陆
+			console.log('/admin路由下查看req.session.loginUser'+req.session.loginUser);
+			res.json({re_code:0,userName:req.session.loginUser});//用户已登陆，返回登陆的用户的用户名
 		}else{
-			res.json({re_code:1});//用户未登陆
+			console.log('/admin路由下用户未登陆');
+			res.json({re_code:-1});//用户未登陆
 		}
 	});
 	app.get('/logout',function(req,res,next){
@@ -118,15 +127,17 @@ module.exports = function(app){
 		var status = req.body.params.Status;
 		var tags = req.body.params.Tags;
 		var id = req.body.params.id;
+		var userName = req.body.params.userName;
 		console.log(req.body.params);
-		Models.Article.find({'_id':id},function(err,doc){
+		Models.Article.find({'_id':id,'userName':userName},function(err,doc){
 			if (err) {
 				var article = new Models.Article({
 					title:artTitle,
 					date:thisDate,
 					articleContent:artContent,
 					status:status,
-					tags:tags
+					tags:tags,
+					userName:userName
 				});
 				article.save(function(err){
 					if (err) {
@@ -134,45 +145,57 @@ module.exports = function(app){
 						res.json({isSave:-1,articleId:''});
 					}else{
 						console.log('article save success');
-						res.json({isSave:1,articleId:article._id});
+						Models.Article.find({'userName':userName},function(err,docs){
+							if (err) {
+								console.log(err);
+								return;
+							}
+							// res.json(docs);
+							res.json({isSave:1,articleId:article._id,newArticleList:docs});
+						});
 					}
 				});
-				// console.log('文章查询失败');
-				// console.log(err);
-				// res.json({isExit:-1});
 			}else{
+				//update
 				Models.Article.findByIdAndUpdate(id,{
 					title:artTitle,
 					articleContent:artContent,
 					status:status},function(err,docs){
 						if(err){
 							console.log(err);
-							res.json({update:-1});
+							res.json({isSave:-1});//更新失败
 						}else{
 							console.log('update success');
-							res.json({update:1});
+							Models.Article.find({'userName':userName},function(err,docs){
+								if (err) {
+									console.log(err);
+									return;
+								}
+								// res.json(docs);
+								res.json({isSave:1,newArticleList:docs});
+							});
 						}
 					});
-				// if (doc[0]) {
-				// 	//文章存在，update
-					
-				// 	// res.json({isExit:1});//
-				// }else{
-				// 	//不存在 save
-					
-				// }
 			}
 		})	
 	});
 	//查询文章列表
 	app.get('/article/articleList',function(req,res){
-		Models.Article.find({},function(err,docs){
-			if (err) {
-				console.log(err);
-				return;
-			}
-			res.json(docs);
-		})
+		if (req.session.loginUser) {
+			// console.log('articleList通过用户名查找文章列表，判断该用户是否登陆'+req.body.params.userName);
+			Models.Article.find({'userName':req.session.loginUser},function(err,docs){
+				if (err) {
+					console.log(err);
+					return;
+				}
+				res.json(docs);
+			});
+			// res.json({re_code:0});//用户已登陆
+		}else{
+			// console.log('用户登录已经超时');
+			res.json({re_code:-1});//用户未登陆
+		}
+		
 	});
 	app.post('/article/del',function(req,res){
 		var idToDel = req.body.params.id;
@@ -185,8 +208,14 @@ module.exports = function(app){
 					console.log(error);
 					res.json({del:-1});
 				}else{
-					console.log('del success');
-					res.json({del:1});
+					//删除完成后查找并返回新的list
+					Models.Article.find({'userName':req.session.loginUser},function(err,docs){
+						if (err) {
+							console.log(err);
+							return;
+						}
+						res.json(docs);
+					});
 				}
 			})
 		}

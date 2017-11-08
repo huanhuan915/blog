@@ -69,10 +69,13 @@ export default{
 					//3数据库查询失败
 					if (res.data.re_code===0) {
 						alert("登录成功");
-						window.location = '/admin.html#/admin/user'
+						window.location = '/admin.html#/admin/user';
 					}else if (res.data.re_code===1) {
 						alert("用户名或密码错误，请重试");
-						this.username = '';
+						this.userName = '';
+					}else if (res.data.re_code===4) {
+						alert("用户名不存在,请先注册");
+						this.userName = '';
 					}else{
 						alert("登陆失败，请稍后重试");
 						this.username = '';
@@ -80,7 +83,7 @@ export default{
 					}
 					console.log("success");
 					console.log(res);
-				}, function(){
+				}.bind(this), function(){
 					console.log("error");
 				})
 				.catch(function(){

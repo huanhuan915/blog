@@ -21,7 +21,8 @@ var articleSchema = new mongoose.Schema({
 	date: String,
 	articleContent: String,
 	status: String,
-	tags: []
+	tags: [],
+	userName: String
 });
 var tagSchema = new mongoose.Schema({
 	tagName: String,

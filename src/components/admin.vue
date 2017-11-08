@@ -31,6 +31,7 @@
 <script>
 import Vue from "vue";
 import axios from 'axios';
+import bus from './assets/Bus.js';
 
 export default{
 	data(){
@@ -45,6 +46,22 @@ export default{
 	},
 	methods: {
 
+	},
+	mounted: function(){
+		console.log('admin mounted');
+		axios.get('/admin').then(function(res){
+			if (res.data.re_code==0) {
+				//用户已经登陆
+				var userName = res.data.userName;
+				// console.log('当前登录的用户为'+userName);
+				bus.$emit('userName',userName);
+			}else{
+				alert("您的登陆信息已失效，请重新登陆");
+				window.location = '/admin.html#/login';
+			}
+		}.bind(this)).catch(function(err){
+			console.log(err);
+		});
 	}
 }
 </script>

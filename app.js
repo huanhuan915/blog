@@ -23,7 +23,7 @@ app.use(session({
     cookie: {
         httpOnly:true,
         secure: false, //secure值为true时，cookie在HTTP中是无效的，在HTTPS中才有效
-        maxAge: 60 * 1000//cooki多久后过期的相对时间
+        maxAge: 600000 * 1000//cooki多久后过期的相对时间
     }
 }))
 

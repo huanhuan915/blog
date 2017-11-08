@@ -33,7 +33,8 @@ export default{
 			items: [],
 			title: '请输入文章标题......',
 			ev_left: 0,
-			ev_right: 0
+			ev_right: 0,
+			userName: ''
 		}
 	},
 	methods:{
@@ -44,7 +45,8 @@ export default{
 				articleContent:'',
 				status: 'writing',
 				tags: [],
-				date: ''
+				date: '',
+				userName: this.userName
 			};
 			if (!this.items[0]) {
 				this.items[0] = item;
@@ -80,20 +82,12 @@ export default{
 		// },
 		del:function(item){
 			if (0==item._id) {
+				//删除未保存的草稿
 				if (this.items.length==1) {
 					this.items.shift(item);
 					console.log('this.items.length==1')
-					//将添加文章时在路由上新增的0去掉
-					//..........................
-					//..........................
-					//..........................
-					//..........................
-					//..........................
-					//..........................
-					//..........................
-					// this.$router.replace({path: ''});
+					//同时更改路由
 					this.$router.back();
-					// delete this.$route.params.id;
 					console.log(this.$route.params);
 					return;
 				}else{
@@ -101,15 +95,15 @@ export default{
 					this.items.shift(item);
 					bus.$emit('init',this.items[0]);
 				}
-				
-				// this.$router.replace({ path: '/admin/articleList'});
-				
 			}
 			axios.post('/article/del',{
 				params: {
 					id:item._id
 				}
 			}).then(function(res){
+				//后台返回删除过后的新的list
+				this.items = res.data;
+				console.log(res.data);
 				bus.$emit('init',this.items[0]);
 			}.bind(this)).catch(function(err){
 				console.log(err);
@@ -124,12 +118,24 @@ export default{
 			var hoverItem = ev.target.id;
 			var targetEle = document.getElementById(hoverItem);
 			targetEle.childNodes[2].style.display = 'none';
+		},
+		getArticleList(){
+
 		}
 	},
 	mounted(){
+		console.log('articleList mounted ---- ');
+		bus.$on('articleSaveSuccess',function(items){
+			this.items = items;
+		}.bind(this));
+
 		axios.get('/article/articleList').then(function(res){
 			this.items = res.data;
-			if (this.items.length==0) {
+			if (res.data.re_code==-1) {
+				//用户登录信息已超时，请重新登陆
+				alert("您的登陆信息已失效，请重新登陆");
+				window.location = '/admin.html#/login';
+			}else if (this.items.length==0) {
 				this.$router.replace({ path: '/admin/articleList'});
 				//不显示文章详情组件，去除
 			}else{
@@ -138,7 +144,7 @@ export default{
 		}.bind(this)).catch(function(error){
 			console.log(error);
 		});
-		// console.log(this.$refs.delArticle.style);
+		console.log('list'+this.userName);	
 	}
 }
 </script>
